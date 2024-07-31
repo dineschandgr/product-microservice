@@ -31,6 +31,9 @@ public class ProductService {
         Category category = categoryRepository.findById(product.getTempCategoryId()).orElse(new Category());
         product.setCategory(category);
         User user = commonService.findUserById(userId);
+        if(user == null){
+            throw new Exception("User not found");
+        }
         product.setUserId(userId);
         return productRepository.save(product);
     }
@@ -55,7 +58,7 @@ public class ProductService {
         if(maybeProduct.isPresent()) {
 
             Product oldProduct = maybeProduct.get();
-            oldProduct.setProduct_Name(updatedProduct.getProduct_Name());
+            oldProduct.setProductName(updatedProduct.getProductName());
             oldProduct.setDescription(updatedProduct.getDescription());
             oldProduct.setPrice(updatedProduct.getPrice());
             oldProduct.setGstPercentage(updatedProduct.getGstPercentage());

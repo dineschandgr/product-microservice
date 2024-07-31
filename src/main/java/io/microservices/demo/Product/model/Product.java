@@ -1,6 +1,7 @@
 package io.microservices.demo.Product.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -26,9 +27,16 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private  Integer id;
 
-    private  String product_Name;
-    private  String description;
-    private  double price;
+    @Column(name = "product_name")
+    private String productName;
+
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "price")
+    private double price;
+
+    @Column(name = "gstPercentage")
     private double gstPercentage;
 
     @JsonIgnore
@@ -39,6 +47,7 @@ public class Product {
     @Transient
     private Integer tempCategoryId;
 
+    @Column(name = "user_id")
     private Long userId;
 
 }

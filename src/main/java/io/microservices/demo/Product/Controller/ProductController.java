@@ -3,6 +3,8 @@ package io.microservices.demo.Product.Controller;
 import io.microservices.demo.Product.Repository.CategoryRepository;
 import io.microservices.demo.Product.Service.ProductService;
 import io.microservices.demo.Product.model.Product;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +28,7 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    //private final Logger LOGGER = LoggerFactory.getLogger(ProductController.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(ProductController.class);
 
     @Autowired
     private CategoryRepository categoryRepository;
@@ -38,14 +40,16 @@ public class ProductController {
         return new ResponseEntity<>(product, HttpStatus.OK);
     }
 
-   @GetMapping("/{id}")
-    public ResponseEntity<Product> getProductById(@PathVariable Integer id) {
-        Optional<Product> product = productService.getProductById(id);
-        return product.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    @GetMapping("/{id}")
+    public ResponseEntity<Product> getProductById(@PathVariable(name = "id") Integer id) {
+       LOGGER.info("inside getProductById {} ",id);
+       Optional<Product> product = productService.getProductById(id);
+       return product.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
     public ResponseEntity<Product> addProduct(@RequestBody Product product) throws Exception {
+        LOGGER.info("inside addProduct {} ", product);
         try {
             productService.addProduct(product);
         } catch (Exception e) {
@@ -57,13 +61,13 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateProduct(@PathVariable Integer id, @RequestBody Product productDetails) throws Exception {
+    public ResponseEntity<String> updateProduct(@PathVariable(name = "id") Integer id, @RequestBody Product productDetails) throws Exception {
          productService.updateProduct(id,productDetails);
         return  ResponseEntity.ok("Product Updated Successfully!");
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteProduct(@PathVariable Integer id) {
+    public ResponseEntity<String> deleteProduct(@PathVariable(name = "id") Integer id) {
         productService.deleteProduct(id);
         return ResponseEntity.ok("delete success");
     }
