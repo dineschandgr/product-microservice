@@ -34,6 +34,11 @@ public class ProductController {
     private CategoryRepository categoryRepository;
 
 
+    @GetMapping("/test")
+    public String testApi(){
+        return "Product TestApi works.";
+    }
+
     @GetMapping
     public ResponseEntity<List<Product>> getAllProduct() {
         List<Product> product = productService.getAllProduct();
